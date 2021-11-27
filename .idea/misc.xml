@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/ToDoList/app/src/main/res/drawable/bg_btn_dialog.xml" value="0.24114583333333334" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/ToDoList/app/src/main/res/drawable/bg_et_search.xml" value="0.24114583333333334" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/ToDoList/app/src/main/res/drawable/empty_state.xml" value="0.24114583333333334" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/ToDoList/app/src/main/res/drawable/ic_delete.xml" value="0.24114583333333334" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/ToDoList/app/src/main/res/layout/activity_main.xml" value="0.22083333333333333" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/ToDoList/app/src/main/res/layout/add_fragment.xml" value="0.22083333333333333" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/ToDoList/app/src/main/res/layout/dialog_add.xml" value="0.6" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/ToDoList/app/src/main/res/layout/home_fragment.xml" value="0.452991452991453" />
+        <entry key="..\:/Users/rahim/AndroidStudioProjects/ToDoList/app/src/main/res/layout/tasks_rv.xml" value="0.536" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

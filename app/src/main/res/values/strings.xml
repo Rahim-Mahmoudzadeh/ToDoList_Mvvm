@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ToDoList</string>
+    <string name="todo">لیست خود را سرچ کنید</string>
+    <string name="empty_toast">حاجی جان مادرت یه تسکی اضافه کن</string>
+    <string name="delete_all">پاک کردن همه</string>
+    <string name="go_to_bank">رفتن به بانک</string>
+    <string name="ok">ثبت</string>
+    <string name="add_task">تسک جدید اضافه کنید</string>
+    <string name="edit_task">ویرایش تسک</string>
+</resources>
