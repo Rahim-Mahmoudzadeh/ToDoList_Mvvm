@@ -12,12 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.todolist.base.App
 import com.todolist.base.Resource
+import com.todolist.base.TodoListFragment
 import com.todolist.databinding.HomeFragmentBinding
 import com.todolist.featuer.addTask.AddTasksDialog
 import com.todolist.data.Task
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HomeFragment : Fragment(), AddTasksDialog.AddTask, HomeAdapter.TaskEventListener {
+class HomeFragment : TodoListFragment(), AddTasksDialog.AddTask, HomeAdapter.TaskEventListener {
     val viewModelHome: ViewModelHome by viewModel()
     lateinit var binding: HomeFragmentBinding
     lateinit var homeAdapter: HomeAdapter
@@ -76,13 +77,15 @@ class HomeFragment : Fragment(), AddTasksDialog.AddTask, HomeAdapter.TaskEventLi
             tasks?.let { resources ->
                 when (resources) {
                     is Resource.Loading -> {
-
+                        showProgressBar(true)
                     }
                     is Resource.Success -> {
+                        showProgressBar(false)
                         homeAdapter.tasks = resources.data as ArrayList<Task>
                         chekEmpty(resources.data)
                     }
                     is Resource.Error -> {
+                        showProgressBar(false)
                         showErrorResponce(resources.message.toString())
                     }
                 }
@@ -96,12 +99,14 @@ class HomeFragment : Fragment(), AddTasksDialog.AddTask, HomeAdapter.TaskEventLi
             it?.let { resources ->
                 when (resources) {
                     is Resource.Loading -> {
-
+                        showProgressBar(true)
                     }
                     is Resource.Success -> {
+                        showProgressBar(false)
                         showSuccessResponce(resources.data.toString())
                     }
                     is Resource.Error -> {
+                        showProgressBar(false)
                         showErrorResponce(resources.message.toString())
                     }
                 }
@@ -124,15 +129,15 @@ class HomeFragment : Fragment(), AddTasksDialog.AddTask, HomeAdapter.TaskEventLi
             it?.let { resources ->
                 when (resources) {
                     is Resource.Loading -> {
-                        showPrograssbar(true)
+                        showProgressBar(true)
                     }
                     is Resource.Success -> {
                         showSuccessResponce(resources.data.toString())
-                        showPrograssbar(false)
+                        showProgressBar(false)
                     }
                     is Resource.Error -> {
                         showErrorResponce(resources.message.toString())
-                        showPrograssbar(false)
+                        showProgressBar(false)
                     }
                 }
             }
@@ -144,12 +149,14 @@ class HomeFragment : Fragment(), AddTasksDialog.AddTask, HomeAdapter.TaskEventLi
             it?.let { resource ->
                 when (resource) {
                     is Resource.Loading -> {
-
+                        showProgressBar(true)
                     }
                     is Resource.Success -> {
+                        showProgressBar(false)
                         showSuccessResponce(resource.data.toString())
                     }
                     is Resource.Error -> {
+                        showProgressBar(false)
                         showErrorResponce(resource.message.toString())
                     }
                 }
@@ -166,12 +173,14 @@ class HomeFragment : Fragment(), AddTasksDialog.AddTask, HomeAdapter.TaskEventLi
             it?.let { resource ->
                 when (resource) {
                     is Resource.Loading -> {
-
+                        showProgressBar(true)
                     }
                     is Resource.Success -> {
+                        showProgressBar(false)
                         showSuccessResponce(resource.data.toString())
                     }
                     is Resource.Error -> {
+                        showProgressBar(false)
                         showErrorResponce(resource.message.toString())
                     }
                 }
@@ -194,12 +203,14 @@ class HomeFragment : Fragment(), AddTasksDialog.AddTask, HomeAdapter.TaskEventLi
             it?.let { resours ->
                 when (resours) {
                     is Resource.Loading -> {
-
+                        showProgressBar(true)
                     }
                     is Resource.Success -> {
+                        showProgressBar(false)
                         homeAdapter.tasks = resours.data as ArrayList<Task>
                     }
                     is Resource.Error -> {
+                        showProgressBar(false)
                         showErrorResponce(resours.message.toString())
                     }
                 }
@@ -213,13 +224,5 @@ class HomeFragment : Fragment(), AddTasksDialog.AddTask, HomeAdapter.TaskEventLi
 
     fun showSuccessResponce(textError: String) {
         Toast.makeText(activity, textError, Toast.LENGTH_SHORT).show()
-    }
-
-    fun showPrograssbar(show: Boolean) {
-        if (show) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-        }
     }
 }
