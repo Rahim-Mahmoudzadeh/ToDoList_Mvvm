@@ -9,6 +9,7 @@ import com.todolist.data.Task
 @Database(entities = [Task::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
+
     companion object {
         @Volatile
         private var instance: AppDatabase? = null
@@ -27,4 +28,5 @@ abstract class AppDatabase : RoomDatabase() {
         }
     }
 }
+
 private const val DATABASE_NAME = "sunflower-db"

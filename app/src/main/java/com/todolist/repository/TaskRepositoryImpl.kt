@@ -3,11 +3,11 @@ package com.todolist.repository
 import androidx.lifecycle.LiveData
 import com.todolist.db.AppDatabase
 import com.todolist.data.Task
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.*
 
 class TaskRepositoryImpl(private val appDatabase: AppDatabase) : TaskRepository {
 
-    override fun getTask(): Flow<List<Task>> = appDatabase.taskDao().getTask()
+    override suspend fun getTask(): Flow<List<Task>> = appDatabase.taskDao().getTask()
 
     override suspend fun addTask(task: Task) = appDatabase.taskDao().addTask(task)
 

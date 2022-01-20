@@ -6,10 +6,12 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.todolist.base.App
+import com.todolist.base.Resource
 import com.todolist.databinding.HomeFragmentBinding
 import com.todolist.featuer.addTask.AddTasksDialog
 import com.todolist.data.Task
@@ -43,17 +45,15 @@ class HomeFragment : Fragment(), AddTasksDialog.AddTask, HomeAdapter.TaskEventLi
         binding.ivHomeDeleteAllTasks.setOnClickListener {
             deleteAllTask()
         }
-        binding.etHomeSearch.addTextChangedListener(object :TextWatcher{
+        binding.etHomeSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.isNullOrEmpty())
-                {
+                if (s.isNullOrEmpty()) {
                     getTasks()
-                }
-                else{
+                } else {
                     showSearchName(s.toString())
                 }
             }
@@ -72,38 +72,89 @@ class HomeFragment : Fragment(), AddTasksDialog.AddTask, HomeAdapter.TaskEventLi
     }
 
     private fun getTasks() {
-        viewModelHome.getTask.observe(viewLifecycleOwner) { tasks ->
-            tasks?.let {
-                homeAdapter.tasks = it as ArrayList
-                chekEmpty()
-            }
-        }
-    }
+        viewModelHome.operationsGetTask.observe(viewLifecycleOwner) { tasks ->
+            tasks?.let { resources ->
+                when (resources) {
+                    is Resource.Loading -> {
 
-    private fun deleteAllTask() {
-        viewModelHome.deleteAllTasks()
-    }
-
-    private fun chekEmpty() {
-        viewModelHome.getTask.observe(viewLifecycleOwner) {
-            it?.let { list ->
-                if (list.isEmpty()) {
-                    binding.rlHomeEmpty.visibility = View.VISIBLE
-                    binding.recyclerView.visibility = View.GONE
-                } else {
-                    binding.recyclerView.visibility = View.VISIBLE
-                    binding.rlHomeEmpty.visibility = View.GONE
+                    }
+                    is Resource.Success -> {
+                        homeAdapter.tasks = resources.data as ArrayList<Task>
+                        chekEmpty(resources.data)
+                    }
+                    is Resource.Error -> {
+                        showErrorResponce(resources.message.toString())
+                    }
                 }
             }
         }
     }
 
+    private fun deleteAllTask() {
+        viewModelHome.deleteAllTasks().observe(viewLifecycleOwner)
+        {
+            it?.let { resources ->
+                when (resources) {
+                    is Resource.Loading -> {
+
+                    }
+                    is Resource.Success -> {
+                        showSuccessResponce(resources.data.toString())
+                    }
+                    is Resource.Error -> {
+                        showErrorResponce(resources.message.toString())
+                    }
+                }
+            }
+        }
+    }
+
+    private fun chekEmpty(listTask: List<Task>) {
+        if (listTask.isNullOrEmpty()) {
+            binding.rlHomeEmpty.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.GONE
+        } else {
+            binding.recyclerView.visibility = View.VISIBLE
+            binding.rlHomeEmpty.visibility = View.GONE
+        }
+    }
+
     override fun addTask(task: Task) {
-        viewModelHome.addTask(task)
+        viewModelHome.addTask(task).observe(viewLifecycleOwner) {
+            it?.let { resources ->
+                when (resources) {
+                    is Resource.Loading -> {
+                        showPrograssbar(true)
+                    }
+                    is Resource.Success -> {
+                        showSuccessResponce(resources.data.toString())
+                        showPrograssbar(false)
+                    }
+                    is Resource.Error -> {
+                        showErrorResponce(resources.message.toString())
+                        showPrograssbar(false)
+                    }
+                }
+            }
+        }
     }
 
     override fun update(task: Task) {
-        viewModelHome.update(task)
+        viewModelHome.update(task).observe(viewLifecycleOwner) {
+            it?.let { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+
+                    }
+                    is Resource.Success -> {
+                        showSuccessResponce(resource.data.toString())
+                    }
+                    is Resource.Error -> {
+                        showErrorResponce(resource.message.toString())
+                    }
+                }
+            }
+        }
     }
 
     override fun onClick(task: Task) {
@@ -111,26 +162,64 @@ class HomeFragment : Fragment(), AddTasksDialog.AddTask, HomeAdapter.TaskEventLi
     }
 
     override fun deleteTask(task: Task) {
-        viewModelHome.deleteTask(task)
-    }
+        viewModelHome.deleteTask(task).observe(viewLifecycleOwner) {
+            it?.let { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
 
-    override fun onLongClick(task: Task) {
-        alertDialog?.let { alertDialog->
-            alertDialog.arguments= Bundle().apply {
-                putString(App.EDIT_DIALOG, App.EDIT_DIALOG)
-                putParcelable(App.EDIT_TASK,task)
+                    }
+                    is Resource.Success -> {
+                        showSuccessResponce(resource.data.toString())
+                    }
+                    is Resource.Error -> {
+                        showErrorResponce(resource.message.toString())
+                    }
+                }
             }
-            alertDialog.show(parentFragmentManager,null)
         }
     }
 
-    fun showSearchName(name:String)
-    {
-        viewModelHome.searchTaskName(name)
-        viewModelHome.searchTask.observe(viewLifecycleOwner){
-            it?.let { tasks->
-                homeAdapter.tasks=tasks as ArrayList<Task>
+    override fun onLongClick(task: Task) {
+        alertDialog?.let { alertDialog ->
+            alertDialog.arguments = Bundle().apply {
+                putString(App.EDIT_DIALOG, App.EDIT_DIALOG)
+                putParcelable(App.EDIT_TASK, task)
             }
+            alertDialog.show(parentFragmentManager, null)
+        }
+    }
+
+    fun showSearchName(name: String) {
+        viewModelHome.searchTaskName(name).observe(viewLifecycleOwner) {
+            it?.let { resours ->
+                when (resours) {
+                    is Resource.Loading -> {
+
+                    }
+                    is Resource.Success -> {
+                        homeAdapter.tasks = resours.data as ArrayList<Task>
+                    }
+                    is Resource.Error -> {
+                        showErrorResponce(resours.message.toString())
+                    }
+                }
+            }
+        }
+    }
+
+    fun showErrorResponce(textError: String) {
+        Toast.makeText(activity, textError, Toast.LENGTH_SHORT).show()
+    }
+
+    fun showSuccessResponce(textError: String) {
+        Toast.makeText(activity, textError, Toast.LENGTH_SHORT).show()
+    }
+
+    fun showPrograssbar(show: Boolean) {
+        if (show) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
         }
     }
 }

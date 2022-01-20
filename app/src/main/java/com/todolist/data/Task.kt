@@ -8,7 +8,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity
 data class Task(
-
     var name:String,
     var isChecked:Boolean?
 ):Parcelable
